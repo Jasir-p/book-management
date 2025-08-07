@@ -44,13 +44,17 @@ class BooksSerializer(serializers.ModelSerializer):
     
 class BooksViewSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
+    upload_by = serializers.SerializerMethodField()
 
     class Meta:
         model = Books
-        fields = ['id', 'title', 'genre', 'description', 'cover_image', 'author']
+        fields = ['id', 'title', 'genre', 'description', 'cover_image', 'author','upload_by']
 
     def get_author(self, obj):
         return obj.author.values_list('name', flat=True)
+    
+    def get_upload_by(self, obj):
+        return obj.upload_by.username
 
         
     

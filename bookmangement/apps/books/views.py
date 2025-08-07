@@ -1,15 +1,15 @@
 from django.shortcuts import render
-from rest_framework.views import APIView
+from rest_framework import views,generics
 from .models import Books
 from .serializers import BooksSerializer,BooksViewSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .permissions import Is_Uploader
-from .services import get_all_books,get_my_books,get_book_by_id,delete_book,create_book
+from .services import list_all_books,list_my_books,get_book_by_id,delete_book,create_book
 # Create your views here.
 
-class BookManagement(APIView):
+class BookManagement(views.APIView):
     
     def get_permissions(self):
         if self.request.method in ['POST','GET']:
@@ -18,7 +18,7 @@ class BookManagement(APIView):
 
     def get(self, request):
         # Retrieve all books from the database
-        books = get_all_books()
+        books = list_all_books()
         serializer = BooksViewSerializer(books, many=True)
         return Response(serializer.data)
 
@@ -34,7 +34,8 @@ class BookManagement(APIView):
     
 
     def delete (self, request, *args, **kwargs):
-        # Delete a book from the database
+        # Delete a book 
+
         book_id = request.data.get('book_id')
         if not book_id:
             return Response({'error': 'Book Id is required'}, status=status.HTTP_400_BAD_REQUEST)
@@ -46,5 +47,16 @@ class BookManagement(APIView):
         self.check_object_permissions(request,book)
         book.delete()
         return Response({'message': 'Book deleted successfully'}, status=status.HTTP_200_OK)
+    
+
+class ListUploaderBook(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = BooksViewSerializer
+    def get_queryset(self):
+        return list_my_books(self.request)
+    
+
+
+    
 
 

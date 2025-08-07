@@ -2,11 +2,11 @@ from .models import Books,Author
 from django.core.exceptions import ObjectDoesNotExist
 
 
-def get_all_books():
+def list_all_books():
     return Books.objects.filter(is_active=True)
 
-def get_my_books(request):
-    return Books.objects.filter(user=request.user, is_active=True)
+def list_my_books(request):
+    return Books.objects.filter(upload_by=request.user)
 
 def get_book_by_id(book_id):
     try:
