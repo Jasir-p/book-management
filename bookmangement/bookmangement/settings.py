@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'apps.users',
     'apps.books',
+    'apps.readinglists'
     ]
 
 MIDDLEWARE = [

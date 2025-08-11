@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .permissions import Is_Uploader
 from .services import list_all_books,list_my_books,get_book_by_id,delete_book,create_book
+from django.db import IntegrityError
 # Create your views here.
 
 class BookManagement(views.APIView):
@@ -24,12 +25,19 @@ class BookManagement(views.APIView):
 
     def post(self, request, *args, **kwargs):
         # Create a new book in the database
-        serializer = BooksSerializer(data=request.data)
-        if serializer.is_valid():
-            create_book(request, serializer.validated_data)
-            return Response({"message:Successfully added"}, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+
+            serializer = BooksSerializer(data=request.data)
+            if serializer.is_valid():
+                create_book(request, serializer.validated_data)
+                return Response({"message:Successfully added"}, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        except IntegrityError:
+            return Response({"message": "Book already exists"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
     
 

@@ -18,3 +18,10 @@ class Books(models.Model):
     publication_date = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ['-publication_date']
+        constraints = [
+            models.UniqueConstraint(fields=['upload_by', 'title'], name='unique_book_per_user')
+            ]
+        
+

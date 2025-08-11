@@ -15,7 +15,7 @@ def get_book_by_id(book_id):
         return None
 
 def create_book(request,validated_data):
-    authors_name = validated_data['authors_name',[]]
+    authors_name = validated_data.pop('authors_name',[])
     book = Books.objects.create(**validated_data, upload_by=request.user)
     for name in authors_name:
         author ,created = Author.objects.get_or_create(name=name)
