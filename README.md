@@ -222,7 +222,7 @@ Response(200 Ok)
     "message: "Book deleted successfully"
 
 }
-```bash
+```
 #### Create Reading List
 ```bash
 POST /api/reading-lists/
@@ -247,18 +247,6 @@ Content-Type: application/json
 }
 ```
 
-
-Example error response:
-```json
-{
-  "error": "Validation failed",
-  "details": {
-    "email": ["This field is required."],
-    "username": ["This field must be unique."]
-  }
-}
-```
-## Development
 
 ### Project Structure
 ```
