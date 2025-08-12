@@ -199,8 +199,30 @@ Content-Type: application/json
   "description": "A classic American novel set in the Jazz Age."
 }
 
-Response
+Response:
+
+{
+
+    "message:Successfully added"
+
+}
 ```
+#### Delete Book
+```bash
+DELETE /api/book-management/
+
+{
+ "book_id":5
+}
+```bash
+```bash
+Response(200 Ok)
+
+{
+
+    "message: "Book deleted successfully"
+
+}
 
 #### Create Reading List
 ```bash
@@ -226,48 +248,6 @@ Content-Type: application/json
 }
 ```
 
-## Data Models
-
-### User
-- `username` (unique)
-- `email` (unique)
-- `first_name`
-- `last_name`
-- `date_joined`
-
-### Book
-- `title`
-- `authors` (JSONField - list of strings)
-- `genre`
-- `publication_date`
-- `description` (optional)
-- `created_by` (ForeignKey to User)
-- `created_at`
-- `updated_at`
-
-### ReadingList
-- `name`
-- `description` (optional)
-- `owner` (ForeignKey to User)
-- `created_at`
-- `updated_at`
-
-### ReadingListItem
-- `reading_list` (ForeignKey to ReadingList)
-- `book` (ForeignKey to Book)
-- `order` (IntegerField for custom ordering)
-- `added_at`
-
-## Error Handling
-
-The API returns appropriate HTTP status codes and error messages:
-
-- `400 Bad Request`: Invalid input data
-- `401 Unauthorized`: Authentication required
-- `403 Forbidden`: Permission denied
-- `404 Not Found`: Resource not found
-- `409 Conflict`: Resource already exists
-- `500 Internal Server Error`: Server error
 
 Example error response:
 ```json
@@ -279,24 +259,6 @@ Example error response:
   }
 }
 ```
-
-## Testing
-
-Run the test suite:
-
-```bash
-python manage.py test
-```
-
-Run with coverage:
-
-```bash
-pip install coverage
-coverage run --source='.' manage.py test
-coverage report
-coverage html  # Generates HTML coverage report
-```
-
 ## Development
 
 ### Project Structure
@@ -304,7 +266,7 @@ coverage html  # Generates HTML coverage report
 book-management-api/
 ├── manage.py
 ├── requirements.txt
-├── .env.example
+├── .env
 ├── book_management/
 │   ├── __init__.py
 │   ├── settings.py
@@ -316,24 +278,7 @@ book-management-api/
 │   └── reading_lists/
 ```
 
-### Adding New Features
 
-1. Create new app: `python manage.py startapp app_name`
-2. Add to `INSTALLED_APPS` in settings.py
-3. Create models, serializers, views, and URLs
-4. Write tests
-5. Update API documentation
-
-## Deployment
-
-For production deployment:
-
-1. Set `DEBUG=False` in environment
-2. Configure proper database (PostgreSQL recommended)
-3. Set up static files serving
-4. Use production WSGI server (gunicorn)
-5. Configure reverse proxy (nginx)
-6. Set up SSL certificate
 
 ## Contributing
 
