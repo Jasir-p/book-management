@@ -214,8 +214,7 @@ DELETE /api/book-management/
 {
  "book_id":5
 }
-```bash
-```bash
+
 Response(200 Ok)
 
 {
@@ -223,7 +222,7 @@ Response(200 Ok)
     "message: "Book deleted successfully"
 
 }
-
+```bash
 #### Create Reading List
 ```bash
 POST /api/reading-lists/
