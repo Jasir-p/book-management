@@ -100,6 +100,12 @@ Content-Type: application/json
   "email": "john@example.com",
   "password": "secure_password123",
 }
+Response(201 Created):
+{
+    "id": 5,
+   "username": "john_doe",
+   "email": "john@example.com"
+}
 ```
 
 #### User Login
@@ -111,17 +117,73 @@ Content-Type: application/json
   "username": "john_doe",
   "password": "secure_password123",
 }
+
+Response(200 ok):
+{
+    "refresh": "9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b",
+    "access": "9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+}
 ```
 
 #### User Profile
 ```bash
-POST /api/users/id=2/
-Content-Type: application/json
-
+GET /api/users/id=2/
 {
-  "username": "john_doe",
-  "password": "secure_password123",
+    "id": 5,
+   "username": "john_doe",
+   "email": "john@example.com"
 }
+```
+
+#### List All Book
+```bash
+GET /api/book-management/
+Retrive all books
+
+[
+    {
+        "id": 17,
+        "title": "The wave",
+        "genre": "Programming",
+        "description": "A deep dive into advanced Python concepts.",
+        "author": [
+            "jasi",
+            "jiju"
+        ],
+        "publication_date": "2025-08-11"
+    },
+    {
+        "id": 18,
+        "title": "The waves",
+        "genre": "Programmingss",
+        "description": "A deep dive into advanced Python concepts.",
+        "author": [
+            "jasi",
+            "jiju"
+        ],
+        "publication_date": "2025-08-11"
+    },
+    {
+        "id": 11,
+        "title": "The Sic artist",
+        "genre": "Psycology",
+        "description": "A deep dive into advanced Sycology concepts.",
+        "author": [
+            "jasi"
+        ],
+        "publication_date": "2025-08-09"
+    },
+    {
+        "id": 15,
+        "title": "The Si artist",
+        "genre": "Psycology",
+        "description": "A deep dive into advanced Sycology concepts.",
+        "author": [
+            "jasi"
+        ],
+        "publication_date": "2025-08-09"
+    }
+]
 ```
 
 #### Create Book
@@ -136,6 +198,8 @@ Content-Type: application/json
   "genre": "Fiction",
   "description": "A classic American novel set in the Jazz Age."
 }
+
+Response
 ```
 
 #### Create Reading List
