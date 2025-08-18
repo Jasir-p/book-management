@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status,views
 from .serializers import UserSerializer,UserViewSerializer
 import logging
 from .models import CustomeUser 
@@ -13,7 +13,17 @@ from .permissions import IsOwner
 
 # Create your views here.
 
+class RegisterView(views.APIView):
+    permission_classes = [AllowAny]
 
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "User registered successfully", "user": serializer.data},
+            status=status.HTTP_201_CREATED
+        )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class UserManagementView(ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.  
@@ -22,8 +32,6 @@ class UserManagementView(ModelViewSet):
     serializer_class = UserSerializer
 
     def get_permissions(self):
-        if self.action == 'create':
-            return [AllowAny()]
         if self.action == 'list':
             return [IsAdminUser()]
         return [IsAuthenticated(),IsOwner()]

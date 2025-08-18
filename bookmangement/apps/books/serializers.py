@@ -48,7 +48,7 @@ class BooksViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Books
-        fields = ['id', 'title', 'genre', 'description', 'cover_image', 'author','upload_by']
+        fields = ['id', 'title', 'genre', 'description','author','upload_by','publication_date']
 
     def get_author(self, obj):
         return obj.author.values_list('name', flat=True)

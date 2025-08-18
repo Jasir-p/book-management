@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404
 
 
 class ReadingListView(views.APIView):
+    
     def get_permissions(self):
         if self.request.method in ["PATCH", "DELETE"]:
             return [IsListOwner(), permissions.IsAuthenticated()]

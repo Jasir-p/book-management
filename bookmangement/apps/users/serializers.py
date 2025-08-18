@@ -7,7 +7,7 @@ from utils.constants import NAME_REGEX,EMAIL_REGEX,PASSWORD_REGEX
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomeUser
-        fields = ['username', 'email', 'password']
+        fields = ['id','username', 'email', 'password']
         extra_kwargs = {
             'password': {'write_only': True},
             }
@@ -52,6 +52,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         password = validated_data.pop('password', None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
         if password:
             instance.set_password(password)
 
@@ -63,6 +66,6 @@ class UserSerializer(serializers.ModelSerializer):
 class UserViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomeUser
-        fields = ['username','email']
+        fields = ['id','username','email']
 
     
