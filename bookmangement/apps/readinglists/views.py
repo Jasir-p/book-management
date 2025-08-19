@@ -32,7 +32,7 @@ class ReadingListView(views.APIView):
         else:
             reading_list = get_all_reading_list(request)
             
-            return paginate_queryset_with_serializer(reading_list,request,ReadingListSerializer,page_size=1)
+            return paginate_queryset_with_serializer(reading_list,request,ReadingListSerializer,page_size=5)
     
     def post(self, request, *args, **kwargs):
         print(request.data)
