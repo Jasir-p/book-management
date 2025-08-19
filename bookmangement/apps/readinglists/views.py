@@ -5,10 +5,15 @@ from .models import ReadingList,ReadingListBook
 from .serializers import ReadingListBookSerializer,ReadingListSerializer,ReadingListBookViewSerializer,ReadingListWithBooksSerializer
 from .services import (
     get_reading_list,
-   get_all_reading_list,books_with_order_list,add_book_reading_list,remove_book_reading_list,book_with_list,update_order_reading_list)
+   get_all_reading_list,
+   books_with_order_list,
+   add_book_reading_list,
+   remove_book_reading_list,
+   book_with_list,
+   update_order_reading_list)
 from .permissions import IsListOwner
 from django.shortcuts import get_object_or_404
-from bookmangement.paginations import StandardResultsSetPagination
+from bookmangement.paginations import paginate_queryset_with_serializer,StandardResultsSetPagination
 
 
 
@@ -26,8 +31,8 @@ class ReadingListView(views.APIView):
             return Response(serializer.data)
         else:
             reading_list = get_all_reading_list(request)
-            serializer = ReadingListSerializer(reading_list, many=True)
-            return Response(serializer.data)
+            
+            return paginate_queryset_with_serializer(reading_list,request,ReadingListSerializer,page_size=1)
     
     def post(self, request, *args, **kwargs):
         print(request.data)
