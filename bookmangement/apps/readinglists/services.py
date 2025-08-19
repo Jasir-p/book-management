@@ -56,6 +56,8 @@ def remove_book_reading_list(reading_list_id,book_id,):
 @transaction.atomic   
 def update_order_reading_list(reading_list_book,order):
     reading_list_books_count = ReadingListBook.objects.filter(reading_list=reading_list_book.reading_list).count()
+    print(reading_list_books_count)
+    print(order)
     if order > reading_list_books_count or order<1:
         return False
 
@@ -64,10 +66,6 @@ def update_order_reading_list(reading_list_book,order):
         return reading_list_book
     
     original_order = reading_list_book.order
-    temp_order = reading_list_books_count+1
-    reading_list_book.order= temp_order
-    reading_list_book.save()
-    print(original_order,order)
     
     if order < original_order:
         print('if')

@@ -8,6 +8,7 @@ from .services import (
    get_all_reading_list,books_with_order_list,add_book_reading_list,remove_book_reading_list,book_with_list,update_order_reading_list)
 from .permissions import IsListOwner
 from django.shortcuts import get_object_or_404
+from bookmangement.paginations import StandardResultsSetPagination
 
 
 
@@ -18,16 +19,15 @@ class ReadingListView(views.APIView):
             return [IsListOwner(), permissions.IsAuthenticated()]
         return [permissions.IsAuthenticated()]
     
-    def get(self, request):
-        reading_list = get_all_reading_list(request)
-        serializer = ReadingListSerializer(reading_list, many=True)
-        return Response(serializer.data)
-    
-    def get_reading_list(self, request,pk):
-        reading_list = get_reading_list(request,pk)
-        serializer = ReadingListSerializer(reading_list)
-        return Response(serializer.data)
-
+    def get(self, request,pk=None):
+        if pk:
+            reading_list = get_reading_list(pk)
+            serializer = ReadingListSerializer(reading_list)
+            return Response(serializer.data)
+        else:
+            reading_list = get_all_reading_list(request)
+            serializer = ReadingListSerializer(reading_list, many=True)
+            return Response(serializer.data)
     
     def post(self, request, *args, **kwargs):
         print(request.data)
@@ -37,16 +37,19 @@ class ReadingListView(views.APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def patch(self , request, pk):
+    def patch(self, request, pk):
         try:
             reading_list = get_reading_list(pk)
             self.check_object_permissions(request, reading_list)
-            serializer = ReadingListSerializer(reading_list, data=request.data, partial=True)
+            serializer = ReadingListSerializer(reading_list, data=request.data,context={'request': request}, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error":str(e)},status=status.HTTP_400_BAD_REQUEST)
     
     def delete( self, request, pk):
         try:
@@ -96,8 +99,12 @@ class ReadingListBookManagement(views.APIView):
             list_book = book_with_list(reading_list_with_book_id)
             reading_list =get_reading_list(list_book.reading_list.id)
             self.check_object_permissions(request,reading_list )
-            update_order_reading_list(list_book,new_order)
-            return Response ({"message": "order updated"}, status=status.HTTP_200_OK)
+            result = update_order_reading_list(list_book, new_order)
+
+            if not result:
+                return Response({"error": "Invalid order"}, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response({"message": "Order updated successfully"}, status=status.HTTP_200_OK)
         except Exception as e:
             print(str(e))
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
