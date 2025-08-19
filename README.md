@@ -92,7 +92,7 @@ Authorization: Token <your-token-here>
 
 #### User Registration
 ```bash
-POST /api/users/
+POST /api/users/register
 Content-Type: application/json
 
 {
@@ -137,7 +137,7 @@ GET /api/users/id=2/
 
 #### List All Book
 ```bash
-GET /api/book-management/
+GET /api/books/
 Retrive all books
 
 [
@@ -186,9 +186,42 @@ Retrive all books
 ]
 ```
 
+#### My Books
+```bash
+GET /api/books/
+Retrive all books
+
+[
+    {
+        "id": 17,
+        "title": "The wave",
+        "genre": "Programming",
+        "description": "A deep dive into advanced Python concepts.",
+        "author": [
+            "jasi",
+            "jiju"
+        ],
+        "publication_date": "2025-08-11"
+    },
+    {
+        "id": 18,
+        "title": "The waves",
+        "genre": "Programmingss",
+        "description": "A deep dive into advanced Python concepts.",
+        "author": [
+            "jasi",
+            "jiju"
+        ],
+        "publication_date": "2025-08-11"
+    },
+]
+```
+
+
+
 #### Create Book
 ```bash
-POST /api/book-management/
+POST /api/books/
 Authorization: Token <your-token>
 Content-Type: application/json
 
@@ -207,6 +240,23 @@ Response:
 
 }
 ```
+
+#### Edit Book
+```bash
+PATCH /api/books/<book_id>/
+Authorization: Bearer <access-token>
+Content-Type: application/json
+
+{
+  "title": "The Great Gatsby - Updated"
+}
+
+Response:
+{
+  "message": "Book updated successfully"
+}
+
+```
 #### Delete Book
 ```bash
 DELETE /api/book-management/
@@ -223,6 +273,24 @@ Response(200 Ok)
 
 }
 ```
+#### Get Reading Lists
+```bash
+GET /api/reading-list/
+Authorization: Bearer <access-token>
+
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "name": "The jothish",
+            "description": "A deep dive into advanced Sycology concepts."
+        }
+    ]
+}
+```
 #### Create Reading List
 ```bash
 POST /api/reading-lists/
@@ -233,18 +301,126 @@ Content-Type: application/json
   "name": "Summer Reading 2024",
   "description": "Books to read during summer vacation"
 }
+
+Response:
+{
+  "message": "Reading list created"
+}
+```
+
+#### Update Reading List
+```bash
+PATCH /api/reading-list/7/
+Authorization: Bearer <access-token>
+Content-Type: application/json
+
+{
+  "name": "The Jothish Calicut",
+  "description": "A deep dive into advanced Psychology concepts."
+}
+
+Response:
+{
+  "message": "Reading list updated"
+}
+
+```
+
+#### Delete Reading List
+```bash
+GET /api/list-book/5/
+Authorization: Bearer <access-token>
+
+Response:
+{
+"message": "Reading list deleted"
+}
+```
+
+#### Get Books in Reading List
+```bash
+DELETE /api/reading-list/7/
+Authorization: Bearer <access-token>
+
+Response:
+[
+    {
+        "id": 1,
+        "name": "The jothish",
+        "description": "A deep dive into advanced Sycology concepts.",
+        "reading_list_book": [
+            {
+                "book": {
+                    "id": 1,
+                    "title": "The waves of lands of india",
+                    "genre": "Programmingss",
+                    "description": "A deep dive into advanced Python concepts.",
+                    "author": [
+                        "jasi",
+                        "ju"
+                    ],
+                    "publication_date": "2025-08-19"
+                },
+                "order": 1,
+                "id": 1
+            }
+        ]
+    }
+]
 ```
 
 #### Add Book to Reading List
 ```bash
-POST /api/reading-lists/1/add-book/
-Authorization: Token <your-token>
+POST /api/list-book-management/
+Authorization: Bearer <access-token>
 Content-Type: application/json
 
 {
-  "book_id": 5,
-  "order": 1
+  "reading_list": 5,
+  "book": 11
 }
+
+Response:
+{
+  "message": "Book added to reading list"
+}
+
+```
+
+#### Update Book Order in Reading List
+```bash
+PATCH /api/list-book-management/
+Authorization: Bearer <access-token>
+Content-Type: application/json
+
+{
+  "reading_list_book": 10,
+  "order": 5
+}
+
+Response:
+{
+  "message": "Book order updated"
+}
+
+
+```
+
+#### Remove Book from Reading List
+```bash
+DELETE /api/list-book-management/
+Authorization: Bearer <access-token>
+Content-Type: application/json
+
+{
+  "reading_list": 5,
+  "book": 11
+}
+
+Response:
+HTTP/1.1 204 No Content
+
+
 ```
 
 
